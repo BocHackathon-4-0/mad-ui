@@ -1,0 +1,67 @@
+@import './assets/scss/login.scss';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .head-text {
+    @apply text-heading2-bold text-light-1;
+  }
+  .navbar-main {
+    @apply fixed top-0 z-30 flex w-full items-center
+      justify-between bg-dark-2 px-6 py-3;
+  }
+  .main-container {
+    @apply flex min-h-screen flex-1 flex-col items-center
+      bg-dark-1 px-6 pb-10 pt-28 max-md:pb-32 sm:px-10;
+  }
+  .left-sidebar {
+    @apply sticky left-0 top-0 z-20 flex h-screen flex-col
+      justify-between overflow-auto border-r border-r-dark-4
+      bg-dark-2 pb-5 pt-24 max-md:hidden;
+  }
+  .left-sidebar_link {
+    @apply relative flex gap-4 rounded-lg p-3;
+  }
+  .bottombar {
+    @apply fixed bottom-0 z-10 w-full rounded-t-3xl
+      p-4 backdrop-blur-lg xs:px-7 md:hidden;
+  }
+  .bottombar_container {
+    @apply flex items-center justify-between gap-3 xs:gap-5;
+  }
+  .bottombar_link {
+    @apply relative flex flex-col items-center gap-2
+      rounded-lg p-2 sm:flex-1 sm:px-2 sm:py-2.5;
+  }
+  .right-sidebar {
+    @apply sticky right-0 top-0 z-20 flex h-screen w-fit flex-col
+    justify-between gap-12 overflow-auto border-l border-l-dark-4
+    bg-dark-2 px-10 pb-6 pt-28 max-xl:hidden;
+  }
+}
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}

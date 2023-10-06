@@ -1,0 +1,68 @@
+.title {
+  font-size: 24px;
+}
+
+.btn-logout:hover {
+  background-color: #89379c;
+  border-radius: 6px;
+  color: #ffff;
+}
+
+.left-sidebar_link:hover {
+  background-color: #89379c;
+  color: #ffff;
+}
+
+.login-form {
+  margin-top: 1rem;
+  z-index: 10;
+}
+
+.container {
+  box-shadow: 0 0 12px 7px rgb(0 0 0 / 10%);
+  border-radius: 15px;
+  background: white;
+  overflow: hidden;
+  width: 50vw;
+  height: 60vh;
+}
+
+.wrapper {
+  margin: 2rem auto;
+  align-items: center;
+  position: relative;
+  background: white;
+}
+
+.design {
+  .pill-2 {
+    background: linear-gradient(#ff966d, #fa538d, #89379c);
+    border: 30px solid #e2c5e2;
+    border-radius: 200px;
+    position: absolute;
+    height: 450px;
+    width: 220px;
+    top: -150px;
+    left: -80px;
+  }
+  .pill-3 {
+    background: linear-gradient(#ff966d, #fa538d);
+    border-radius: 70px;
+    position: absolute;
+    left: 1100px;
+    height: 300px;
+    width: 120px;
+  }
+  .pill-4 {
+    background: linear-gradient(#ff966d, #fa538d);
+    border-radius: 70px;
+    position: absolute;
+    left: 200px;
+    height: 300px;
+    width: 120px;
+  }
+}
+
+@media (min-width: 768px) {
+  // todo other media queries
+}
