@@ -1,5 +1,3 @@
-"use server";
-
 import { auth, firebaseDb } from "@/firebase";
 import {
   signInWithEmailAndPassword,
@@ -48,8 +46,18 @@ export async function customLogOut() {
 export async function fetchCollection(storeId: string, dbCollection: string) {
   const adminsCollection = await collection(firebaseDb, dbCollection);
   const adminsSnapshot = await getDocs(adminsCollection);
-  console.log(adminsSnapshot);
+  const test = adminsSnapshot.docs
+      .map((doc) => doc.data());
+  console.info("test => ", test);
   return adminsSnapshot.docs
     .filter((doc) => doc.id === storeId)
     .map((doc) => doc.data())[0];
+}
+
+export async function fetchInvoices(userID: string, dbCollection: string) {
+  const adminsCollection = await collection(firebaseDb, dbCollection);
+  const adminsSnapshot = await getDocs(adminsCollection);
+  return adminsSnapshot.docs
+      .map((doc) => doc.data())
+      .filter((invoice) => invoice.userId === userID);
 }

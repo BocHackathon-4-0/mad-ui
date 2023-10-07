@@ -29,6 +29,13 @@ const config: Config = {
           fontWeight: "700",
         },
       ],
+      "small-medium": [
+        "14px",
+        {
+          lineHeight: "140%",
+          fontWeight: "500",
+        },
+      ],
     },
     extend: {
       backgroundImage: {
@@ -44,6 +51,7 @@ const config: Config = {
         'dark-4': "#1F1F22",
         'light-1': "#FFFFFF",
         'light-2': "#EFEFEF",
+        'gray-1': "#697C89",
       },
       screens: {
         xs: '400px',

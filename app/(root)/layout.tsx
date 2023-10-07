@@ -23,12 +23,10 @@ export default function RootLayout({children}: {
                     <main className={'flex flex-row'}>
                         <LeftSidebar />
                         <section className={'main-container'}>
-                            <div className={'w-full max-w-4xl'}>
-
+                            <div className={'w-full max-w-4xl test'}>
                                     <Suspense fallback={<LoadingSkeleton />}>
                                         {children}
                                     </Suspense>
-
                             </div>
                         </section>
                         <RightSidebar />

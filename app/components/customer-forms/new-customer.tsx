@@ -1,94 +1,119 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { Button, Form, Input, InputNumber } from "antd";
-import React, { useState } from "react";
-import { useCookies } from "react-cookie";
-import { ValueSource } from "firebase/remote-config";
+import {useRouter} from "next/navigation";
+import {Button, Form, Input, message, Space, Spin} from "antd";
+import React, {Fragment, useState} from "react";
 
 type FieldTypes = {
-  clientEmail?: string;
-  name?: string;
-  amount?: number;
-  investment?: number;
+    clientEmail?: string;
+    name?: string;
+    amount?: number;
+    investment?: number;
 };
 
 export default function NewCustomerForm() {
-  const [cookies, setCookie] = useCookies();
+    const [isLoading, setIsLoading]
+        = useState<boolean>(false);
 
-  const router = useRouter();
+    const router = useRouter();
 
-  const onFinish = (values: any) => {
-    const payload = {
-      userId: "jkfBCYstfgQ4FIcig2Y3sQ7dvZ62",
-      name: "Dionysis Kastellanis",
-      email: "dionysis.k22@gmail.com",
-      companyEmail: "invoice@company.com",
-      invoiceDetails: {
-        total: parseInt(values.amount),
-      },
-      invest: parseInt(values.investment),
-      freelancerType: "software developer",
+    const onFinish = (values: any) => {
+        setIsLoading(true);
+        const payload = {
+            userId: "jkfBCYstfgQ4FIcig2Y3sQ7dvZ62",
+            name: "Dionysis Kastellanis",
+            email: "dionysis.k22@gmail.com",
+            companyEmail: "invoice@company.com",
+            invoiceDetails: {
+                total: parseInt(values.amount),
+            },
+            invest: parseInt(values.investment),
+            freelancerType: "software developer",
+        };
+
+        fetch("https://bochackathon-mad-server-6b81f7a78ed6.herokuapp.com/add-freelancer-invoice", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                authorization: "Bearer YwbzJnSXA5WXpDL2h32aWRlcl94NTA5X2N",
+            },
+            body: JSON.stringify(payload),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    setIsLoading(false);
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setIsLoading(false);
+                console.log("Response data:", data);
+            })
+            .catch((error) => {
+                setIsLoading(false);
+                console.error("There was a problem with the fetch operation:", error);
+            });
+
+        // DISPLAY TOAST MESSAGE
+        message.open({
+            content: "Invoice Created Successfully",
+        }).then();
+
+        // WAIT, THEN REDIRECT
+        setTimeout(() => {
+            setIsLoading(false);
+            router.push('/');
+        }, 4000);
     };
-    console.info("form values => ", values);
 
-    fetch("http://localhost:8080/add-freelancer-invoice", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: "Bearer YwbzJnSXA5WXpDL2h32aWRlcl94NTA5X2N",
-      },
-      body: JSON.stringify(payload),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        console.log(response);
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Response data:", data);
-        // You can handle the response data here
-      })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
-  };
+    return (
+        <Fragment>
+            {!isLoading ? (
+                <Form layout="vertical" className="mt-10 w-2/3" onFinish={onFinish}>
+                    <div>
+                        <p className={"text-light-2 font-bold"}>Name</p>
+                        <Form.Item<FieldTypes> name="name" className={"pt-2"}>
+                            <Input/>
+                        </Form.Item>
+                    </div>
 
-  return (
-    <Form layout="vertical" className="mt-10 w-2/3" onFinish={onFinish}>
-      <div>
-        <p className={"text-light-2 font-bold"}>Name</p>
-        <Form.Item<FieldTypes> name="name" className={"pt-2"}>
-          <Input />
-        </Form.Item>
-      </div>
+                    <div>
+                        <p className={"text-light-2 font-bold"}>Client Email</p>
+                        <Form.Item<FieldTypes> name="clientEmail" className={"pt-2"}>
+                            <Input/>
+                        </Form.Item>
+                    </div>
 
-      <div>
-        <p className={"text-light-2 font-bold"}>Client Email</p>
-        <Form.Item<FieldTypes> name="clientEmail" className={"pt-2"}>
-          <Input />
-        </Form.Item>
-      </div>
+                    <div className={"w-2/5"}>
+                        <p className={"text-light-2 font-bold"}>Amount</p>
+                        <Form.Item<FieldTypes> name="amount" className={"pt-2"}>
+                            <Input type={"number"}/>
+                        </Form.Item>
+                    </div>
 
-      <div className={"w-2/5"}>
-        <p className={"text-light-2 font-bold"}>Amount</p>
-        <Form.Item<FieldTypes> name="amount" className={"pt-2"}>
-          <Input type={"number"} />
-        </Form.Item>
-      </div>
+                    <div className={"w-2/5"}>
+                        <p className={"text-light-2 font-bold"}>Investment</p>
+                        <Form.Item<FieldTypes> name="investment" className={"pt-2"}>
+                            <Input type={"number"}/>
+                        </Form.Item>
+                    </div>
 
-      <div className={"w-2/5"}>
-        <p className={"text-light-2 font-bold"}>Investment</p>
-        <Form.Item<FieldTypes> name="investment" className={"pt-2"}>
-          <Input type={"number"} />
-        </Form.Item>
-      </div>
-
-      <Button type="primary" htmlType="submit" className={"bg-primary-500"}>
-        Submit
-      </Button>
-    </Form>
-  );
+                    <Button type="primary" htmlType="submit" className={"bg-primary-500"}>
+                        Submit
+                    </Button>
+                </Form>
+            ) : (
+                <Fragment>
+                    <div className={'visual-complete'}>
+                        <Space direction="vertical" style={{ width: '100%' }}>
+                            <Spin tip="Loading" size="large">
+                                <div className="content" />
+                            </Spin>
+                        </Space>
+                    </div>
+                </Fragment>
+            )}
+        </Fragment>
+    );
 }

@@ -1,9 +1,11 @@
 "use client";
+
 import React, { Fragment, useEffect, useState } from "react";
 import { AdminAuth } from "@/app/context/AuthContext";
 import { useCookies } from "react-cookie";
 import { fetchCollection } from "@/lib/actions/user.actions";
 import { Bar } from "react-chartjs-2";
+// @ts-ignore
 import { groupBy } from "lodash";
 
 export default function Savings() {
@@ -11,34 +13,29 @@ export default function Savings() {
   const [cookies, setCookie] = useCookies();
 
   const [user, setUser] = useState<any>(null);
-  console.info("admin issue invoice => ", admin);
+  // console.info("admin issue invoice => ", admin);
   useEffect(() => {
     if (!user && cookies.uid) {
       fetchCollection(cookies.uid, "Users").then((user) => setUser(user));
     }
   }, [cookies]);
-
-  console.log("Savings", user);
+  // console.log("Savings", user);
   const investments = user?.investments || [];
-  console.log("savngs", investments);
+  // console.log("savings", investments);
 
   function getData() {
     if (investments.length === 0) return { x: [], y: [] };
-    let type: string[] = [];
-    let amount: number[] = [];
-
-    let groupedResults = groupBy(investments, (result) => result.stock);
-    console.log(groupedResults);
-
+    // let type: string[] = [];
+    // let amount: number[] = [];
+    let groupedResults = groupBy(investments, (result: any) => result.stock);
+    // console.log(groupedResults);
     const keys = [];
     const sums = [];
-
     for (const key in groupedResults) {
       if (groupedResults.hasOwnProperty(key)) {
         keys.push(key);
-
-        const amountArray = groupedResults[key].map((item) => item.amount);
-        const sum = amountArray.reduce((acc, curr) => acc + curr, 0);
+        const amountArray = groupedResults[key].map((item: any) => item.amount);
+        const sum = amountArray.reduce((acc: any, curr: any) => acc + curr, 0);
         sums.push(sum);
       }
     }
@@ -54,7 +51,6 @@ export default function Savings() {
     //   (total, item) => total + item.amount,
     //   0
     // );
-
     return { x: keys, y: sums };
   }
 

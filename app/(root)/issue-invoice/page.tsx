@@ -8,7 +8,7 @@ export default function NewCustomer() {
     console.info('admin issue invoice => ', admin);
     return(
         <Fragment>
-            <h1 className='head-text'>New Customer</h1>
+            <h1 className='head-text'>Issue New Invoice</h1>
             <NewCustomerForm />
         </Fragment>
     );
