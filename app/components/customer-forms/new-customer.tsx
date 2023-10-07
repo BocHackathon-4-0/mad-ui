@@ -1,38 +1,94 @@
-'use client';
+"use client";
 
-import {useRouter} from "next/navigation";
-import {Button, Form, Input} from 'antd';
-import React from 'react';
+import { useRouter } from "next/navigation";
+import { Button, Form, Input, InputNumber } from "antd";
+import React, { useState } from "react";
+import { useCookies } from "react-cookie";
+import { ValueSource } from "firebase/remote-config";
+
+type FieldTypes = {
+  clientEmail?: string;
+  name?: string;
+  amount?: number;
+  investment?: number;
+};
 
 export default function NewCustomerForm() {
-    const router = useRouter();
-    return(
-        <Form layout="vertical" className='mt-10 w-2/3'>
-            <div>
-                <p className={'text-light-2 font-bold'}>First Name</p>
-                <Form.Item name="firstName" className={'pt-2'}>
-                    <Input/>
-                </Form.Item>
-            </div>
+  const [cookies, setCookie] = useCookies();
 
-            <div>
-                <p className={'text-light-2 font-bold'}>Last Name</p>
-                <Form.Item name="lastName" className={'pt-2'}>
-                    <Input/>
-                </Form.Item>
-            </div>
+  const router = useRouter();
 
-            <div>
-                <p className={'text-light-2 font-bold'}>Mobile</p>
-                <Form.Item name="mobile" className={'pt-2'}>
-                    <Input/>
-                </Form.Item>
-            </div>
+  const onFinish = (values: any) => {
+    const payload = {
+      userId: "jkfBCYstfgQ4FIcig2Y3sQ7dvZ62",
+      name: "Dionysis Kastellanis",
+      email: "dionysis.k22@gmail.com",
+      companyEmail: "invoice@company.com",
+      invoiceDetails: {
+        total: parseInt(values.amount),
+      },
+      invest: parseInt(values.investment),
+      freelancerType: "software developer",
+    };
+    console.info("form values => ", values);
 
-            <Button type="primary" htmlType="submit" className={'bg-primary-500'}>
-                Submit
-            </Button>
+    fetch("http://localhost:8080/add-freelancer-invoice", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: "Bearer YwbzJnSXA5WXpDL2h32aWRlcl94NTA5X2N",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        console.log(response);
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Response data:", data);
+        // You can handle the response data here
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
 
-        </Form>
-    );
+  return (
+    <Form layout="vertical" className="mt-10 w-2/3" onFinish={onFinish}>
+      <div>
+        <p className={"text-light-2 font-bold"}>Name</p>
+        <Form.Item<FieldTypes> name="name" className={"pt-2"}>
+          <Input />
+        </Form.Item>
+      </div>
+
+      <div>
+        <p className={"text-light-2 font-bold"}>Client Email</p>
+        <Form.Item<FieldTypes> name="clientEmail" className={"pt-2"}>
+          <Input />
+        </Form.Item>
+      </div>
+
+      <div className={"w-2/5"}>
+        <p className={"text-light-2 font-bold"}>Amount</p>
+        <Form.Item<FieldTypes> name="amount" className={"pt-2"}>
+          <Input type={"number"} />
+        </Form.Item>
+      </div>
+
+      <div className={"w-2/5"}>
+        <p className={"text-light-2 font-bold"}>Investment</p>
+        <Form.Item<FieldTypes> name="investment" className={"pt-2"}>
+          <Input type={"number"} />
+        </Form.Item>
+      </div>
+
+      <Button type="primary" htmlType="submit" className={"bg-primary-500"}>
+        Submit
+      </Button>
+    </Form>
+  );
 }
