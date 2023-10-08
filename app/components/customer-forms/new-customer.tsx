@@ -31,7 +31,7 @@ export default function NewCustomerForm() {
             freelancerType: "software developer",
         };
 
-        fetch("https://bochackathon-mad-server-6b81f7a78ed6.herokuapp.com/add-freelancer-invoice", {
+        fetch("http://localhost:8080/add-freelancer-invoice", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

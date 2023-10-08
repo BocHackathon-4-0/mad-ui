@@ -73,12 +73,15 @@ export default function Savings() {
     },
   };
 
+  const investTotal = investments.reduce((total, obj) => total + obj.amount, 0);
+
   return (
     <Fragment>
       <h1 className="head-text" style={{ marginBottom: 100 }}>
         Smart savings
       </h1>
       <Bar data={data} options={options} style={{ maxHeight: "45vh" }} />
+      <div className="mt-10">Total money invested: €{investTotal}</div>
     </Fragment>
   );
 }
